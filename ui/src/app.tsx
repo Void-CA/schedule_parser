@@ -1,8 +1,10 @@
-import { component$, useSignal, useStore, $, useComputed$ } from '@builder.io/qwik';
+import { component$, useSignal, useStore, $, useTask$, useComputed$ } from '@builder.io/qwik';
 import init, { parse_schedule } from '../pkg/parser_horario.js'; 
 import { extractTextFromPDF } from './logic/pdf.js';
 import { ScheduleGrid } from './components/ScheduleGrid.tsx';
 import { MajorSelector } from './components/MajorSelector.tsx';
+import { SubjectExplorer } from './components/SubjectExplorer.tsx';
+import { getDefaultSelectionIds } from './logic/organizer';
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { hydrateEncounter, type Encounter } from './logic/domain';
 
@@ -18,6 +20,19 @@ export const App = component$(() => {
     // Store para el combinatorio (IDs de Grupos seleccionados por el usuario)
     const selectionStore = useStore<{ selectedGroupIds: Set<string> }>({ 
         selectedGroupIds: new Set() 
+    });
+
+    /**
+     * Reactividad: Al cambiar la carrera, recalculamos la pre-configuración inteligente (G1 por defecto)
+     */
+    useTask$(({ track }) => {
+        track(() => selectedMajor.value);
+        if (scheduleStore.encounters.length > 0) {
+           const carrierEncounters = scheduleStore.encounters.filter((e: Encounter) => 
+               e.majors_offered.includes(selectedMajor.value as any)
+           );
+           selectionStore.selectedGroupIds = getDefaultSelectionIds(carrierEncounters);
+        }
     });
 
 
@@ -38,7 +53,16 @@ export const App = component$(() => {
             const data = parse_schedule(rawText);
             
             // Hidratamos los encuentros (calcula GID y UID internamente)
-            scheduleStore.encounters = data.map((e: any) => hydrateEncounter(e));
+            const hydratedEncounters = data.map((e: any) => hydrateEncounter(e));
+            scheduleStore.encounters = hydratedEncounters;
+
+            // --- Lógica de Pre-Configuración Inteligente ---
+            // Solo para la carrera seleccionada
+            const carrierEncounters = hydratedEncounters.filter((e: Encounter) => 
+                e.majors_offered.includes(selectedMajor.value as any)
+            );
+            selectionStore.selectedGroupIds = getDefaultSelectionIds(carrierEncounters);
+
         } catch (e) {
             console.error("Error en el procesamiento:", e);
         } finally {
@@ -54,9 +78,21 @@ export const App = component$(() => {
      */
     const toggleSelection = $((groupId: string) => {
         const newSet = new Set(selectionStore.selectedGroupIds);
+        
         if (newSet.has(groupId)) {
             newSet.delete(groupId);
         } else {
+            // Regla de Exclusividad: Buscar si ya hay un grupo de esta materia seleccionado
+            const incoming = scheduleStore.encounters.find(e => e.groupId === groupId);
+            if (incoming) {
+                for (const existingId of newSet) {
+                    const existing = scheduleStore.encounters.find(e => e.groupId === existingId);
+                    if (existing && existing.subject === incoming.subject) {
+                        newSet.delete(existingId);
+                        break; // Solo puede haber uno por materia
+                    }
+                }
+            }
             newSet.add(groupId);
         }
         selectionStore.selectedGroupIds = newSet;
@@ -67,21 +103,21 @@ export const App = component$(() => {
             <div class="max-w-[1600px] mx-auto p-4 md:p-8 space-y-6">
                 
                 {/* Header: Identidad y Controles */}
-                <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-white p-6 rounded-[2.5rem] border-2 border-slate-100 shadow-sm">
                     <div class="space-y-1">
                         <h1 class="text-2xl font-black tracking-tight flex items-center gap-2">
-                            <span class="bg-teal-600 text-white px-3 py-1 rounded-xl shadow-teal-200 shadow-lg">SIGA</span>
-                            <span class="text-slate-800">Parser</span>
+                            <span class="bg-teal-700 text-white px-4 py-1.5 rounded-2xl shadow-teal-900/20 shadow-xl">SIGA</span>
+                            <span class="text-slate-900">Parser</span>
                         </h1>
                         <div class="flex items-center gap-2">
                             <span class="relative flex h-2 w-2">
-                                <span class={`animate-ping absolute inline-flex h-full w-full rounded-full ${scheduleStore.encounters.length > 0 ? 'bg-green-400' : 'bg-slate-400'} opacity-75`}></span>
-                                <span class={`relative inline-flex rounded-full h-2 w-2 ${scheduleStore.encounters.length > 0 ? 'bg-green-500' : 'bg-slate-500'}`}></span>
+                                <span class={`animate-ping absolute inline-flex h-full w-full rounded-full ${scheduleStore.encounters.length > 0 ? 'bg-teal-400' : 'bg-slate-400'} opacity-75`}></span>
+                                <span class={`relative inline-flex rounded-full h-2 w-2 ${scheduleStore.encounters.length > 0 ? 'bg-teal-600' : 'bg-slate-500'}`}></span>
                             </span>
-                            <p class="text-slate-400 text-xs font-medium uppercase tracking-widest">
+                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
                                 {scheduleStore.encounters.length > 0 
-                                    ? `${scheduleStore.encounters.length} encuentros cargados` 
-                                    : 'Esperando PDF...'}
+                                    ? `${scheduleStore.encounters.length} registros sincronizados` 
+                                    : 'Aguardando origen de datos'}
                             </p>
                         </div>
                     </div>
@@ -91,16 +127,16 @@ export const App = component$(() => {
                         
                         <label class="relative flex-1 lg:flex-none group">
                             <input type="file" accept=".pdf" onChange$={onFileChange} class="hidden" />
-                            <div class="cursor-pointer bg-slate-900 text-slate-50 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-teal-600 hover:shadow-xl hover:shadow-teal-100 transition-all active:scale-95 flex items-center justify-center gap-2 overflow-hidden relative">
+                            <div class="cursor-pointer bg-slate-900 text-slate-50 px-8 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-teal-700 hover:shadow-2xl hover:shadow-teal-900/20 transition-all active:scale-95 flex items-center justify-center gap-3 overflow-hidden">
                                 {isLoading.value ? (
                                     <span class="flex items-center gap-2">
                                         <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                        Procesando...
+                                        Hidratando...
                                     </span>
                                 ) : (
                                     <>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-                                        Subir Horario .pdf
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                        Subir Horario
                                     </>
                                 )}
                             </div>
@@ -108,31 +144,59 @@ export const App = component$(() => {
                     </div>
                 </header>
 
-                {/* Main Calendar Section */}
-                <main class="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-2 md:p-6 overflow-hidden">
-                    <ScheduleGrid 
-                        encounters={scheduleStore.encounters} 
-                        selectedMajor={selectedMajor.value}
-                        selectedGroupIds={selectionStore.selectedGroupIds}
-                        toggleSelection$={toggleSelection}
-                    />
-                </main>
+                <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+                    {/* Panel Izquierdo: Explorador de Materias */}
+                    <aside class="xl:col-span-1 space-y-6">
+                        <div class="bg-white p-6 rounded-[2.5rem] border-2 border-slate-100 shadow-sm h-full flex flex-col">
+                            <div class="space-y-1 mb-6">
+                                <h2 class="text-xl font-black text-slate-900 flex items-center gap-3">
+                                    <span class="w-2.5 h-8 bg-teal-700 rounded-full"></span>
+                                    Catálogo
+                                </h2>
+                                <p class="text-[10px] uppercase font-black tracking-widest text-slate-400 pl-5">Asignaturas Sugeridas</p>
+                            </div>
+                            
+                            {scheduleStore.encounters.length > 0 ? (
+                                <SubjectExplorer 
+                                    encounters={scheduleStore.encounters.filter(e => e.majors_offered.includes(selectedMajor.value as any))}
+                                    selectedGroupIds={selectionStore.selectedGroupIds}
+                                    toggleSelection$={toggleSelection}
+                                />
+                            ) : (
+                                <div class="flex-1 flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-slate-100 rounded-3xl">
+                                    <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-300"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-400">Sin datos disponibles</p>
+                                </div>
+                            )}
+                        </div>
+                    </aside>
+
+                    {/* Panel Derecho: Visualizador de Horario */}
+                    <main class="xl:col-span-3 bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm p-4 md:p-8 overflow-hidden">
+                        <div class="mb-8 flex justify-between items-end">
+                            <div class="space-y-1">
+                                <h2 class="text-2xl font-black text-slate-900">Vista de Itinerario</h2>
+                                <p class="text-[10px] uppercase font-black tracking-widest text-teal-600">Plan de Carrera: {selectedMajor.value}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="px-4 py-2 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></div>
+                                    <span class="text-[10px] font-black text-slate-600 uppercase tracking-tight">Análisis Activo</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <ScheduleGrid 
+                            encounters={scheduleStore.encounters} 
+                            selectedMajor={selectedMajor.value}
+                            selectedGroupIds={selectionStore.selectedGroupIds}
+                            toggleSelection$={toggleSelection}
+                        />
+                    </main>
+                </div>
                 
-                {/* Status Bar: Resumen del Combinatorio */}
-                {selectionStore.selectedGroupIds.size > 0 && (
-                    <footer class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-4 animate-bounce-in z-50 border border-white/10">
-                        <p class="text-sm font-bold">
-                            {selectionStore.selectedGroupIds.size} materias en itinerario
-                        </p>
-                        <div class="h-4 w-[1px] bg-white/20"></div>
-                        <button 
-                            onClick$={() => selectionStore.selectedGroupIds.clear()}
-                            class="text-xs uppercase tracking-widest font-black text-red-400 hover:text-red-300 transition-colors"
-                        >
-                            Limpiar
-                        </button>
-                    </footer>
-                )}
             </div>
         </div>
     );

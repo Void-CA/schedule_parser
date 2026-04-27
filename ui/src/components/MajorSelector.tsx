@@ -5,27 +5,22 @@ interface MajorSelectorProps {
 }
 
 const MAJORS = [
-    { id: "ICE", name: "Ing. Cibernética Electrónica", icon: "🤖" },
-    { id: "IMS", name: "Ing. Mecatrónica", icon: "⚙️" },
-    { id: "IME", name: "Ing. Mecánica", icon: "🔧" },
-    { id: "IGI", name: "Ing. Gestión Industrial", icon: "📊" },
-    { id: "IEE", name: "Ing. Eléctrica", icon: "⚡" },
-    { id: "IEM", name: "Ing. Electromédica", icon: "🏥" },
-    { id: "LAF", name: "Lic. Administración Financiera", icon: "💰" },
-    { id: "LCM", name: "Lic. Comercio y Mercadeo", icon: "📈" },
+    { id: "ICE", name: "Ing. Cibernética Electrónica" },
+    { id: "IMS", name: "Ing. Mecatrónica" },
+    { id: "IME", name: "Ing. Mecánica" },
+    { id: "IGI", name: "Ing. Gestión Industrial" },
+    { id: "IEE", name: "Ing. Eléctrica" },
+    { id: "IEM", name: "Ing. Electromédica" },
+    { id: "LAF", name: "Lic. Administración Financiera" },
+    { id: "LCM", name: "Lic. Comercio y Mercadeo" },
 ];
 
 export const MajorSelector = component$(({ selectedMajor }: MajorSelectorProps) => {
   return (
     <div class="relative w-full lg:w-72 group">
-      {/* Icono decorativo a la izquierda */}
-      <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-sm">
-        {MAJORS.find(m => m.id === selectedMajor.value)?.icon || "🎓"}
-      </div>
-
       <select 
         bind:value={selectedMajor}
-        class="w-full pl-11 pr-10 py-3.5 bg-slate-50 border border-slate-200 text-slate-700 font-bold text-sm rounded-2xl 
+        class="w-full pl-4 pr-10 py-3.5 bg-slate-50 border border-slate-200 text-slate-700 font-bold text-sm rounded-2xl 
                appearance-none cursor-pointer focus:ring-4 focus:ring-teal-100 focus:border-teal-400 focus:bg-white 
                outline-none transition-all duration-200 hover:border-slate-300"
       >

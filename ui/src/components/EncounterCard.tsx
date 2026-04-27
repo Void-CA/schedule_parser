@@ -9,81 +9,78 @@ interface EncounterCardProps {
     toggleSelection$: (uid: string) => void;
 }
 
-export const EncounterCard = component$(({ 
-    clase, 
-    isSelected, 
-    isConflicted, 
-    toggleSelection$ 
+export const EncounterCard = component$(({
+    clase,
+    isSelected,
+    isConflicted,
+    toggleSelection$
 }: EncounterCardProps) => {
 
-    const conflictDetails = (clase as any).conflictType;
+    const { temporal, selection } = clase.conflictType || { temporal: false, selection: false };
 
     return (
-        <div 
+        <div
             onClick$={() => toggleSelection$(clase.groupId)}
-            style={{ 
-                gridColumnStart: getDayColumn(clase.day), 
+            style={{
+                gridColumnStart: getDayColumn(clase.day),
                 gridRowStart: getBlockRowStart(clase.blocks),
                 gridRowEnd: `span ${clase.blocks.length}`
             }}
             class={[
-                "card-base group relative transition-all duration-300 ease-out cursor-pointer",
-                isSelected ? "card-selected scale-[1.02] shadow-xl z-10" : "hover:scale-[1.01] hover:shadow-md",
-                isConflicted ? (isSelected ? "border-red-500 ring-2 ring-red-500/20" : "card-conflict opacity-80") : "",
+                "card-base group transition-all duration-300",
+                isSelected ? "card-selected" : "opacity-80",
+                isConflicted ? "card-conflict" : ""
             ]}
         >
-            {/* Header: Materia y Grupo */}
-            <div class="space-y-1">
-                <div class="flex justify-between items-start gap-1">
-                    <h4 class={[
-                        "font-bold text-[11px] uppercase leading-tight line-clamp-2 transition-colors",
-                        isSelected ? "text-teal-900" : "text-slate-800"
-                    ]}>
-                        {clase.subject}
-                    </h4>
-                    {isConflicted && (
-                        <div class="flex gap-0.5">
-                           {conflictDetails?.temporal && <span class="text-red-500 text-[10px] animate-pulse" title="Traslape de horario">🕒</span>}
-                           {conflictDetails?.selection && <span class="text-amber-500 text-[10px]" title="Materia ya seleccionada en otro grupo">📚</span>}
-                        </div>
-                    )}
-                </div>
-                
-                <div class="flex flex-wrap gap-1 mt-1">
-                    <span class={[
-                        "text-[9px] px-1.5 py-0.5 rounded-md font-mono font-bold transition-colors",
-                        isSelected ? "bg-teal-700 text-teal-50" : "bg-slate-100 text-slate-600"
-                    ]}>
-                        G{clase.group}
-                    </span>
-                    <span class={[
-                        "text-[9px] px-1.5 py-0.5 rounded-md font-medium transition-colors",
-                        isSelected ? "bg-teal-200 text-teal-900" : "bg-slate-100 text-slate-600"
-                    ]}>
-                        {clase.room}
-                    </span>
-                </div>
+            {/* 1. Encabezado: Materia y Badge de Grupo */}
+            <div class="flex justify-between items-start gap-2">
+                <h4 class="font-black text-[11px] uppercase leading-tight tracking-tight line-clamp-2 text-inherit">
+                    {clase.subject}
+                </h4>
+                <span class={[
+                    "text-[9px] px-2 py-0.5 rounded-lg font-black font-mono border",
+                    isSelected ? "bg-white/20 border-white/20 text-white" : "bg-slate-50 border-slate-200 text-slate-500"
+                ]}>
+                    G{clase.group}
+                </span>
             </div>
 
-            {/* Footer: Información del Docente */}
+            {/* 2. Cuerpo: Ubicación (Local) */}
+            <div class="flex items-center gap-1.5">
+                <div class={[
+                    "w-1.5 h-1.5 rounded-full",
+                    isSelected ? "bg-teal-300" : "bg-teal-500"
+                ]}></div>
+                <p class={[
+                    "text-[10px] font-bold tracking-wide",
+                    isSelected ? "text-white" : "text-slate-700"
+                ]}>
+                    Aula {clase.room}
+                </p>
+            </div>
+
+            {/* 3. Footer: Docente */}
             <div class={[
-                "mt-auto pt-1 border-t transition-colors duration-200",
-                isSelected ? "border-teal-500/30" : "border-slate-100",
+                "mt-auto pt-2 border-t",
+                isSelected ? "border-white/10" : "border-slate-100"
             ]}>
                 <p class={[
-                    "text-[10px] truncate font-medium",
-                    isSelected ? "text-teal-800" : "text-slate-400 group-hover:text-slate-600"
+                    "text-[9px] italic font-medium truncate",
+                    isSelected ? "text-white/80" : "text-slate-400"
                 ]} title={clase.professor}>
                     {clase.professor}
                 </p>
             </div>
 
-            {/* Indicador visual de Seleccionado */}
-            {isSelected && (
-                <div class="absolute -right-1 -bottom-1 opacity-20 text-teal-900">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
+            {/* 4. Capas de Alerta de Conflicto */}
+            {isConflicted && (
+                <div class="absolute top-2 right-2 flex gap-1 pointer-events-none">
+                    {temporal && (
+                        <span class="bg-white text-red-600 text-[8px] font-black p-1 rounded shadow-lg animate-pulse">🕒 BLOQUEADO</span>
+                    )}
+                    {selection && (
+                        <span class="bg-white text-amber-600 text-[8px] font-black p-1 rounded shadow-lg">📚 DUPLICADO</span>
+                    )}
                 </div>
             )}
         </div>

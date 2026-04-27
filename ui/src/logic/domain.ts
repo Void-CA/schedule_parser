@@ -1,3 +1,5 @@
+import { type ConflictState } from './conflicts';
+
 export type Day = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
 
 export type AcademicBlock = 
@@ -20,6 +22,7 @@ export interface Encounter {
     // Optional UI state
     isSelected?: boolean;
     isConflicted?: boolean;
+    conflictType?: ConflictState;
 }
 
 export function hydrateEncounter(data: any): Encounter {

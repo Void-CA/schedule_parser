@@ -7,8 +7,10 @@ const getDayColumn = (day: string): number => {
 
 const getBlockRowStart = (blocks: string[]): number => {
     const map: Record<string, number> = {
-        "Morning1": 2, "Morning2": 3, "Morning3": 4, "Morning4": 5, 
-        "Afternoon1": 6, "Afternoon2": 7, "Afternoon3": 8, "Afternoon4": 9, 
+        "Morning1": 2, "Morning2": 3, 
+        "Morning3": 5, "Morning4": 6, 
+        "Afternoon1": 8, "Afternoon2": 9, 
+        "Afternoon3": 11, "Afternoon4": 12, 
     };
     return map[blocks[0]] || 2;
 };

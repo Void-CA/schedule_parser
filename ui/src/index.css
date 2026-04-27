@@ -21,33 +21,54 @@
 }
 
 @layer components {
-  /* Base Component Tokens for Schedule Grid */
   .card-base {
-    @apply relative bg-white border border-slate-100 rounded-2xl p-3 
+    @apply relative bg-white border-2 border-slate-100 rounded-3xl p-3 
            transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] 
-           cursor-pointer hover:shadow-lg hover:shadow-slate-200/50 
-           flex flex-col justify-between overflow-hidden gap-1 hover:border-teal-200;
+           cursor-pointer flex flex-col gap-2 overflow-hidden;
   }
 
   .card-selected {
-    @apply bg-teal-50/50 border-teal-500 text-teal-950 ring-2 ring-teal-500/20 
-           shadow-[0_10px_25px_-5px_rgba(20,184,166,0.3)] z-10;
+    @apply bg-teal-700 border-teal-900 text-white z-10 scale-[1.02] shadow-xl;
   }
 
   .card-conflict {
-    /* Vibrant warning state for exploration */
-    @apply bg-red-50/30 border-red-200 opacity-90 backdrop-blur-[2px];
+    @apply bg-red-600 border-red-800 text-white shadow-xl shadow-red-200 z-20 animate-pulse;
+  }
+
+  .time-slot-label {
+    @apply flex flex-col items-center justify-center border-r border-slate-100 bg-slate-50/50;
+  }
+
+  .grid-border {
+    @apply border border-slate-100/50;
   }
 }
 
+/* src/index.css */
 @keyframes bounce-in {
-  0% { transform: translate(-50%, 100%) scale(0.9); opacity: 0; }
-  70% { transform: translate(-50%, -10px) scale(1.02); opacity: 1; }
-  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+  0% {
+    transform: translate(-50%, 100%) scale(0.9);
+    opacity: 0;
+  }
+
+  70% {
+    transform: translate(-50%, -10px) scale(1.02);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
+  }
 }
 
 .animate-bounce-in {
-  animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: bounce-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.bg-repeating-dots {
+  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+  background-size: 8px 8px;
 }
 
 /* Scrollbar customizations to look clean */
@@ -55,14 +76,17 @@
   height: 6px;
   width: 6px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f5f9; 
+  background: #f1f5f9;
   border-radius: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1; 
+  background: #cbd5e1;
   border-radius: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; 
+  background: #94a3b8;
 }
