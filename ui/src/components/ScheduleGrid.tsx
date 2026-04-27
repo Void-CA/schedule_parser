@@ -35,10 +35,10 @@ const FULL_SLOTS = [
 const GridHeader = component$(() => (
   <>
     {DAYS.map((day, i) => (
-      <div
-        key={`header-${day}`}
+      <div 
+        key={`header-${day}`} 
         class={[
-          "text-center py-3 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] bg-white border-b-2 border-slate-200",
+          "text-center py-2.5 text-[0.625rem] font-black text-slate-600 uppercase tracking-[0.2em] bg-white border-b-2 border-slate-200",
           i === 0 ? "bg-slate-50/80" : ""
         ]}
       >
@@ -57,20 +57,20 @@ const TimeAxis = component$(() => (
       <div key={`slot-${i}`}
         class={[
           "time-slot-label px-2 space-y-0.5 border-r-2 border-slate-200",
-          slot.type === 'break' ? "py-2 bg-slate-200" : "py-3 bg-white"
+          slot.type === 'break' ? "py-1.5 bg-slate-200" : "py-2 bg-white"
         ]}
         style={{ gridRowStart: i + 2, gridColumnStart: 1 }}
       >
         <div class="flex flex-col items-center leading-none text-center">
           <span class={[
-            "text-[11px] font-black",
+            "text-[0.6875rem] font-black",
             slot.type === 'break' ? "text-slate-500" : "text-teal-800"
           ]}>
             {slot.range.split(' - ')[0].replace(' am', '').replace(' pm', '')}
           </span>
-          <span class="text-[11px] opacity-30">—</span>
+          <span class="text-[0.5rem] opacity-30">—</span>
           <span class={[
-            "text-[11px] font-black",
+            "text-[0.6875rem] font-black",
             slot.type === 'break' ? "text-slate-500" : "text-teal-800"
           ]}>
             {slot.range.split(' - ')[1].replace(' am', '').replace(' pm', '')}
@@ -107,7 +107,7 @@ const GridBackground = component$(() => (
               class="pointer-events-none flex items-center justify-center z-10"
               style={{ gridRowStart: row + 2, gridColumnStart: 2, gridColumnEnd: 'span 6' }}
             >
-              <span class="text-[16px] font-black text-slate-500 uppercase tracking-[2em] whitespace-nowrap pl-[2em]">
+              <span class="text-[0.875rem] font-black text-slate-500 uppercase tracking-[1.5rem] whitespace-nowrap pl-[1.5rem]">
                 {slot.label}
               </span>
             </div>
@@ -132,7 +132,7 @@ const EmptyItinerary = component$(() => (
         <path d="m9 16 2 2 4-4" />
       </svg>
     </div>
-    <p class="text-slate-400 font-black uppercase text-[10px] tracking-[0.2em]">Selecciona materias en el catálogo lateral</p>
+    <p class="text-slate-400 font-black uppercase text-[0.625rem] tracking-[0.2em]">Selecciona materias en el catálogo lateral</p>
   </div>
 ));
 
@@ -162,7 +162,7 @@ export const ScheduleGrid = component$(({
 
   return (
     <div class="overflow-x-auto custom-scrollbar select-none">
-      <div class="grid grid-cols-7 gap-px bg-slate-200 min-w-[1100px] relative border-2 border-slate-200 rounded-3xl overflow-hidden shadow-inner">
+      <div class="grid grid-cols-7 gap-px bg-slate-200 min-w-[68rem] relative border-2 border-slate-200 rounded-[2rem] overflow-hidden shadow-inner">
         <GridHeader />
         <TimeAxis />
         <GridBackground />
