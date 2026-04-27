@@ -1,7 +1,9 @@
 import * as pdfjsLib from 'pdfjs-dist';
 
-/** Reconstruye el texto del PDF respetando las líneas físicas basadas en la coordenada Y */
-export const extractTextFromPDF = async (file: File): Promise<string> => {
+export const extractTextFromPDF = async (file: File, workerUrl: string): Promise<string> => {
+    // Configuración interna obligatoria
+    pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     let fullText = "";

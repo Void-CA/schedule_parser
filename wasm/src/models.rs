@@ -47,15 +47,28 @@ pub enum AcademicBlock {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Encounter {
-    pub major: Major,
-    pub group: u8,
+    pub majors_offered: Vec<Major>,
     pub subject: String,
     pub professor: String,
     pub room: String,
     pub day: Day,
     pub blocks: Vec<AcademicBlock>,
+    pub group: u8,
 }
 
+impl Encounter {
+    pub fn new(majors_offered: Vec<Major>, subject: String, professor: String, room: String, day: Day, blocks: Vec<AcademicBlock>, group: u8) -> Self {
+        Self {
+            majors_offered,
+            subject,
+            professor,
+            room,
+            day,
+            blocks,
+            group,
+        }
+    }
+}
 
 impl AcademicBlock {
     /// Traduce las horas crudas del SIGA a bloques académicos.
