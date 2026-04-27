@@ -14,8 +14,10 @@ export interface Encounter {
     day: Day;
     blocks: AcademicBlock[];
     group: number;
-    // Frontend combinatory state
-    uid?: string;
+    // Identifiers for the Flexible Planning Paradigm
+    groupId: string; // Subject + Group (for logic)
+    uid: string;     // Unique specific encounter (for DOM/selection)
+    // Optional UI state
     isSelected?: boolean;
     isConflicted?: boolean;
 }
@@ -25,14 +27,21 @@ export function hydrateEncounter(data: any): Encounter {
         throw new Error("Invalid encounter data: not an object");
     }
     
+    const subject = String(data.subject || 'Unknown Subject');
+    const group = Number(data.group || 0);
+    const day = String(data.day) as Day;
+    const blocks = Array.isArray(data.blocks) ? data.blocks : [];
+
     // Vanilla TypeScript validation & defaults to prevent desynchronization
     return {
         majors_offered: Array.isArray(data.majors_offered) ? data.majors_offered : [],
-        subject: String(data.subject || 'Unknown Subject'),
+        subject,
         professor: String(data.professor || 'Unknown Professor'),
         room: String(data.room || 'Unknown Room'),
-        day: String(data.day) as Day, // Assert as from Rust
-        blocks: Array.isArray(data.blocks) ? data.blocks : [],
-        group: Number(data.group || 0),
+        day,
+        blocks,
+        group,
+        groupId: `${subject}-${group}`.replace(/\s+/g, '_'),
+        uid: `${subject}-${group}-${day}-${blocks.join('')}`.replace(/\s+/g, '_'),
     };
 }

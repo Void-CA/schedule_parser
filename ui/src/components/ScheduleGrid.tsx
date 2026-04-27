@@ -1,12 +1,13 @@
 import { component$, useComputed$, $ } from '@builder.io/qwik';
 import { EncounterCard } from './EncounterCard';
 import { type Encounter } from '../logic/domain';
+import { getConflictState } from '../logic/conflicts';
 
 interface GridProps {
   encounters: Encounter[];
   selectedMajor: string;
-  selectedIds: Set<string>;
-  toggleSelection$: (uid: string) => void;
+  selectedGroupIds: Set<string>;
+  toggleSelection$: (groupId: string) => void;
 }
 
 const DAYS = ['Hora', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
@@ -14,18 +15,25 @@ const DAYS = ['Hora', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sá
 export const ScheduleGrid = component$(({ 
   encounters, 
   selectedMajor, 
-  selectedIds, 
+  selectedGroupIds, 
   toggleSelection$ 
 }: GridProps) => {
 
   const displayEncounters = useComputed$(() => {
-    // Filtrado por carrera y combinatorio
+    // Filtrado por carrera (Modo Exploratorio: mostramos todo lo disponible para la carrera)
     const filtered = encounters.filter(e => e.majors_offered.includes(selectedMajor as any));
-    return filtered.map(clase => ({
-        ...clase,
-        isSelected: selectedIds.has(clase.uid!),
-        isConflicted: !selectedIds.has(clase.uid!) && false // Lógica de conflicto omitida
-    }));
+    
+    return filtered.map(clase => {
+        const isSelected = selectedGroupIds.has(clase.groupId);
+        const conflicts = getConflictState(clase, encounters, selectedGroupIds);
+        
+        return {
+            ...clase,
+            isSelected,
+            isConflicted: conflicts.temporal || conflicts.selection,
+            conflictType: conflicts // Pasamos el detalle del conflicto
+        };
+    });
   });
 
   return (

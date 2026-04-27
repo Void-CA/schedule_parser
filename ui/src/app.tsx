@@ -15,16 +15,11 @@ export const App = component$(() => {
         encounters: [] 
     });
 
-    // Store para el combinatorio (IDs de clases seleccionadas por el usuario)
-    const selectionStore = useStore<{ selectedIds: Set<string> }>({ 
-        selectedIds: new Set() 
+    // Store para el combinatorio (IDs de Grupos seleccionados por el usuario)
+    const selectionStore = useStore<{ selectedGroupIds: Set<string> }>({ 
+        selectedGroupIds: new Set() 
     });
 
-    /** * Función para generar un ID único por encuentro. 
-     * Útil ya que una materia puede tener varios grupos o días.
-     */
-    const getEncounterId = (e: Encounter) => 
-        `${e.subject}-${e.group}-${e.day}-${e.blocks.join('')}`;
 
     /**
      * Acción al subir el archivo: Limpia selecciones previas y parsea el PDF.
@@ -35,19 +30,15 @@ export const App = component$(() => {
         if (!file) return;
 
         isLoading.value = true;
-        selectionStore.selectedIds.clear(); // Limpiamos selección al cargar nuevo PDF
+        selectionStore.selectedGroupIds.clear(); // Limpiamos selección al cargar nuevo PDF
 
         try {
             await init();
             const rawText = await extractTextFromPDF(file, pdfWorkerUrl);
             const data = parse_schedule(rawText);
             
-            // Inyectamos un ID único a cada objeto antes de guardarlo e hidratamos
-            scheduleStore.encounters = data.map((e: any) => {
-                const hydrated = hydrateEncounter(e);
-                hydrated.uid = getEncounterId(hydrated);
-                return hydrated;
-            });
+            // Hidratamos los encuentros (calcula GID y UID internamente)
+            scheduleStore.encounters = data.map((e: any) => hydrateEncounter(e));
         } catch (e) {
             console.error("Error en el procesamiento:", e);
         } finally {
@@ -58,14 +49,17 @@ export const App = component$(() => {
     /**
      * Lógica del Combinatorio: Alternar selección de clases.
      */
-    const toggleSelection = $((uid: string) => {
-        const newSet = new Set(selectionStore.selectedIds);
-        if (newSet.has(uid)) {
-            newSet.delete(uid);
+    /**
+     * Lógica del Combinatorio: Alternar selección por GRUPO.
+     */
+    const toggleSelection = $((groupId: string) => {
+        const newSet = new Set(selectionStore.selectedGroupIds);
+        if (newSet.has(groupId)) {
+            newSet.delete(groupId);
         } else {
-            newSet.add(uid);
+            newSet.add(groupId);
         }
-        selectionStore.selectedIds = newSet;
+        selectionStore.selectedGroupIds = newSet;
     });
 
     return (
@@ -119,20 +113,20 @@ export const App = component$(() => {
                     <ScheduleGrid 
                         encounters={scheduleStore.encounters} 
                         selectedMajor={selectedMajor.value}
-                        selectedIds={selectionStore.selectedIds}
+                        selectedGroupIds={selectionStore.selectedGroupIds}
                         toggleSelection$={toggleSelection}
                     />
                 </main>
                 
                 {/* Status Bar: Resumen del Combinatorio */}
-                {selectionStore.selectedIds.size > 0 && (
+                {selectionStore.selectedGroupIds.size > 0 && (
                     <footer class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-4 animate-bounce-in z-50 border border-white/10">
                         <p class="text-sm font-bold">
-                            {selectionStore.selectedIds.size} clases seleccionadas
+                            {selectionStore.selectedGroupIds.size} materias en itinerario
                         </p>
                         <div class="h-4 w-[1px] bg-white/20"></div>
                         <button 
-                            onClick$={() => selectionStore.selectedIds.clear()}
+                            onClick$={() => selectionStore.selectedGroupIds.clear()}
                             class="text-xs uppercase tracking-widest font-black text-red-400 hover:text-red-300 transition-colors"
                         >
                             Limpiar

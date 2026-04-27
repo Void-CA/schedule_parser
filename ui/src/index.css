@@ -23,21 +23,31 @@
 @layer components {
   /* Base Component Tokens for Schedule Grid */
   .card-base {
-    @apply relative bg-white border border-slate-200 rounded-xl p-3 
-           transition-all duration-200 ease-in-out cursor-pointer hover:shadow-sm 
-           flex flex-col justify-between overflow-hidden gap-1 hover:border-teal-300;
+    @apply relative bg-white border border-slate-100 rounded-2xl p-3 
+           transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] 
+           cursor-pointer hover:shadow-lg hover:shadow-slate-200/50 
+           flex flex-col justify-between overflow-hidden gap-1 hover:border-teal-200;
   }
 
   .card-selected {
-    @apply bg-teal-50 border-teal-500 text-teal-950 ring-1 ring-teal-500/50 
-           shadow-[0_4px_12px_rgba(20,184,166,0.15)] z-10;
+    @apply bg-teal-50/50 border-teal-500 text-teal-950 ring-2 ring-teal-500/20 
+           shadow-[0_10px_25px_-5px_rgba(20,184,166,0.3)] z-10;
   }
 
   .card-conflict {
-    /* Subtle glassmorphism and fading for conflicts */
-    @apply opacity-50 bg-slate-50/80 backdrop-blur-sm border-slate-200 
-           scale-95 pointer-events-none grayscale-[50%];
+    /* Vibrant warning state for exploration */
+    @apply bg-red-50/30 border-red-200 opacity-90 backdrop-blur-[2px];
   }
+}
+
+@keyframes bounce-in {
+  0% { transform: translate(-50%, 100%) scale(0.9); opacity: 0; }
+  70% { transform: translate(-50%, -10px) scale(1.02); opacity: 1; }
+  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 /* Scrollbar customizations to look clean */
