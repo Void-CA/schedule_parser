@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Fira+Sans:wght@400;500;600;700;900&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-300: #5eead4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
+  --color-teal-950: #042f2e;
+
+  /* Typography based on user feedback */
+  --font-sans: "Fira Sans", ui-sans-serif, system-ui;
+  --font-mono: "Fira Code", ui-monospace, SFMono-Regular;
+}
+
+@layer components {
+  /* Base Component Tokens for Schedule Grid */
+  .card-base {
+    @apply relative bg-white border border-slate-200 rounded-xl p-3 
+           transition-all duration-200 ease-in-out cursor-pointer hover:shadow-sm 
+           flex flex-col justify-between overflow-hidden gap-1 hover:border-teal-300;
+  }
+
+  .card-selected {
+    @apply bg-teal-50 border-teal-500 text-teal-950 ring-1 ring-teal-500/50 
+           shadow-[0_4px_12px_rgba(20,184,166,0.15)] z-10;
+  }
+
+  .card-conflict {
+    /* Subtle glassmorphism and fading for conflicts */
+    @apply opacity-50 bg-slate-50/80 backdrop-blur-sm border-slate-200 
+           scale-95 pointer-events-none grayscale-[50%];
+  }
+}
+
+/* Scrollbar customizations to look clean */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9; 
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1; 
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; 
+}
