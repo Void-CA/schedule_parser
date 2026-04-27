@@ -50,7 +50,7 @@ export const App = component$(() => {
 
 
     useVisibleTask$(() => {
-        document.title = "Mi Itinerario - SIGA Parser";
+        document.title = "Mi Itinerario - WHorarios";
     });
 
     /**
@@ -123,8 +123,8 @@ export const App = component$(() => {
                 <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white p-4 rounded-[2rem] border-2 border-slate-100 shadow-sm">
                     <div class="space-y-1">
                         <h1 class="text-xl font-black flex items-center gap-3 tracking-tighter">
-                            <span class="bg-teal-700 text-white px-3 py-1 rounded-xl shadow-teal-900/20 shadow-lg">SIGA</span>
-                            <span class="text-slate-900">Parser</span>
+                            <span class="bg-teal-700 text-white px-3 py-1 rounded-xl shadow-teal-900/20 shadow-lg">Wrangler</span>
+                            <span class="text-slate-900">Horarios</span>
                         </h1>
                     </div>
 
