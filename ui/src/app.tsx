@@ -1,10 +1,11 @@
-import { component$, useSignal, useStore, $, useTask$, useComputed$ } from '@builder.io/qwik';
+import { component$, useSignal, useStore, $, useTask$, useComputed$, useVisibleTask$ } from '@builder.io/qwik';
 import init, { parse_schedule } from '../pkg/parser_horario.js'; 
 import { extractTextFromPDF } from './logic/pdf.js';
 import { ScheduleGrid } from './components/ScheduleGrid.tsx';
 import { MajorSelector } from './components/MajorSelector.tsx';
 import { SubjectExplorer } from './components/SubjectExplorer.tsx';
 import { getDefaultSelectionIds } from './logic/organizer';
+import { getConflictState } from './logic/conflicts';
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { hydrateEncounter, type Encounter } from './logic/domain';
 
@@ -22,6 +23,18 @@ export const App = component$(() => {
         selectedGroupIds: new Set() 
     });
 
+    const hasConflicts = useComputed$(() => {
+        const selected = scheduleStore.encounters.filter(e => 
+            selectionStore.selectedGroupIds.has(e.groupId)
+        );
+        if (selected.length === 0) return true;
+
+        return selected.some(clase => {
+            const state = getConflictState(clase, scheduleStore.encounters, selectionStore.selectedGroupIds);
+            return state.temporal || state.selection;
+        });
+    });
+
     /**
      * Reactividad: Al cambiar la carrera, recalculamos la pre-configuración inteligente (G1 por defecto)
      */
@@ -35,6 +48,10 @@ export const App = component$(() => {
         }
     });
 
+
+    useVisibleTask$(() => {
+        document.title = "Mi Itinerario - SIGA Parser";
+    });
 
     /**
      * Acción al subir el archivo: Limpia selecciones previas y parsea el PDF.
@@ -109,17 +126,6 @@ export const App = component$(() => {
                             <span class="bg-teal-700 text-white px-4 py-1.5 rounded-2xl shadow-teal-900/20 shadow-xl">SIGA</span>
                             <span class="text-slate-900">Parser</span>
                         </h1>
-                        <div class="flex items-center gap-2">
-                            <span class="relative flex h-2 w-2">
-                                <span class={`animate-ping absolute inline-flex h-full w-full rounded-full ${scheduleStore.encounters.length > 0 ? 'bg-teal-400' : 'bg-slate-400'} opacity-75`}></span>
-                                <span class={`relative inline-flex rounded-full h-2 w-2 ${scheduleStore.encounters.length > 0 ? 'bg-teal-600' : 'bg-slate-500'}`}></span>
-                            </span>
-                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-                                {scheduleStore.encounters.length > 0 
-                                    ? `${scheduleStore.encounters.length} registros sincronizados` 
-                                    : 'Aguardando origen de datos'}
-                            </p>
-                        </div>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-4 w-full lg:w-auto">
@@ -175,17 +181,21 @@ export const App = component$(() => {
 
                     {/* Panel Derecho: Visualizador de Horario */}
                     <main class="xl:col-span-3 bg-white rounded-[3rem] border-2 border-slate-100 shadow-sm p-4 md:p-8 overflow-hidden">
-                        <div class="mb-8 flex justify-between items-end">
+                        <div class="mb-8 flex justify-between items-end no-print">
                             <div class="space-y-1">
                                 <h2 class="text-2xl font-black text-slate-900">Vista de Itinerario</h2>
                                 <p class="text-[10px] uppercase font-black tracking-widest text-teal-600">Plan de Carrera: {selectedMajor.value}</p>
                             </div>
-                            <div class="flex gap-2">
-                                <div class="px-4 py-2 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></div>
-                                    <span class="text-[10px] font-black text-slate-600 uppercase tracking-tight">Análisis Activo</span>
-                                </div>
-                            </div>
+                            
+                            {!hasConflicts.value && (
+                                <button 
+                                    onClick$={() => window.print()}
+                                    class="no-print bg-teal-700 text-white px-6 py-2.5 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-teal-800 transition-all shadow-lg shadow-teal-900/10 flex items-center gap-2 animate-bounce-in"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                                    Bajar Horario
+                                </button>
+                            )}
                         </div>
                         
                         <ScheduleGrid 
