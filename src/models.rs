@@ -1,4 +1,6 @@
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub enum Day {
     Monday,
     Tuesday,
@@ -23,7 +25,7 @@ impl Day {
 }
 
 /// Representa la unidad mínima de clase: 50 minutos.
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Serialize, Deserialize)]
 pub enum AcademicBlock {
     /// 08:00 am - 08:50 am
     Morning1,
@@ -43,7 +45,7 @@ pub enum AcademicBlock {
     Afternoon4,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Encounter {
     pub major: Major,
     pub group: u8,
@@ -70,7 +72,7 @@ impl AcademicBlock {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy, Serialize, Deserialize)]
 pub enum Major {
     IGI,
     IMS,

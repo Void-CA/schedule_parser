@@ -1,8 +1,16 @@
 [package]
-name = "calendar_parser"
+name = "parser-horario"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
 
 [dependencies]
-pdf-extract = "0.10.0"
+# Expresiones regulares súper rápidas
 regex = "1.12.3"
+# Serialización para transformar tu struct de Rust a un Objeto de JS
+serde = { version = "1.0", features = ["derive"] }
+# Los puentes mágicos de WebAssembly
+wasm-bindgen = "0.2"
+serde-wasm-bindgen = "0.6"
