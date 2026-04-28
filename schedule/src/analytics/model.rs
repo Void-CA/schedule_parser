@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::domain::models::{Class, Day, Major};
 
 pub struct ScheduleAnalytics {
-    classes: Vec<Class>,
+    pub classes: Vec<Class>,
 }
 
 impl ScheduleAnalytics {
@@ -11,6 +11,15 @@ impl ScheduleAnalytics {
         Self { classes }
     }
 
+    pub fn total_capacity(&self) -> usize {
+        self.classes
+            .iter()
+            .map(|c| c.day)
+            .collect::<std::collections::HashSet<_>>()
+            .len()
+            * 8
+    }
+    
     pub fn classes_per_day(&self) -> HashMap<Day, usize> {
         let mut map = HashMap::new();
 
@@ -75,5 +84,33 @@ impl ScheduleAnalytics {
         for (room, count) in self.room_usage() {
             println!("{}: {}", room, count);
         }
+    }
+
+    pub fn detect_advanced_conflicts(&self) -> Vec<String> {
+        let mut messages = Vec::new();
+
+        for (i, a) in self.classes.iter().enumerate() {
+            for b in self.classes.iter().skip(i + 1) {
+                // Verificar si los bloques de tiempo se solapan
+                let overlaps = a.day == b.day && 
+                    (a.start_block < b.end_block && b.start_block < a.end_block);
+
+                if overlaps {
+                    // Conflicto de Aula: Dos clases en el mismo sitio
+                    if a.room == b.room {
+                        messages.push(format!("Conflict: Room {} is double-booked for {} and {}", a.room, a.subject, b.subject));
+                    }
+                    // Conflicto de Profesor: El profesor no es un electrón, no puede estar en dos sitios
+                    if a.professor == b.professor {
+                        messages.push(format!("Conflict: Professor {} has simultaneous classes in {} and {}", a.professor, a.room, b.room));
+                    }
+                    // Conflicto de Grupo: Un mismo grupo/año no puede dividirse
+                    if a.group == b.group && a.majors.iter().any(|m| b.majors.contains(m)) {
+                        messages.push(format!("Conflict: Group {} ({:?}) has overlapping subjects", a.group, a.majors));
+                    }
+                }
+            }
+        }
+        messages
     }
 }

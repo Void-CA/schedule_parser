@@ -1,3 +1,5 @@
+use core::fmt;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Day {
     Monday,
@@ -18,6 +20,19 @@ impl Day {
             "Vi" => Some(Self::Friday),
             "Sa" => Some(Self::Saturday),
             _ => None,
+        }
+    }
+}
+
+impl fmt::Display for Day {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Day::Monday => write!(f, "Lunes"),
+            Day::Tuesday => write!(f, "Martes"),
+            Day::Wednesday => write!(f, "Miércoles"),
+            Day::Thursday => write!(f, "Jueves"),
+            Day::Friday => write!(f, "Viernes"),
+            Day::Saturday => write!(f, "Sábado"),
         }
     }
 }
