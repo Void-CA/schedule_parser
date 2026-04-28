@@ -3,7 +3,9 @@ mod parser_qa;
 mod error;
 mod validator;
 mod domain;
+mod analytics;
 
+use crate::analytics::model::ScheduleAnalytics;
 use crate::extraction::preprocess::normalize_lines::normalize_lines;
 use crate::extraction::models::row::RowParser;
 use crate::extraction::models::detail::DetailParser;
@@ -11,6 +13,9 @@ use crate::extraction::models::class::RawClass;
 
 use crate::parser_qa::ParserQA;
 use crate::validator::Validator;
+
+use crate::domain::normalizer::Normalizer;
+use crate::domain::models::Class;
 
 fn main() {
     let pdf_path = "horarios_IV.pdf";
@@ -25,11 +30,11 @@ fn main() {
 
     let mut qa = ParserQA::new();
 
-    // dataset futuro (aún crudo)
-    let mut raw_dataset: Vec<RawClass> = Vec::new();
+    // 🔹 dataset FINAL (ya dominio)
+    let mut dataset: Vec<Class> = Vec::new();
 
     for line in lines {
-        qa.inc_total(); // mejor que tocar metrics directo
+        qa.inc_total();
 
         match row_parser.parse(&line) {
             Ok(raw_row) => {
@@ -39,16 +44,24 @@ fn main() {
                     Ok(detail) => {
                         qa.log_detail_success();
 
-                        // 🔹 MERGE
+                        // -----------------------------
+                        // 1. RAW MERGE
+                        // -----------------------------
                         let raw_class = RawClass::from_parts(raw_row, detail);
 
-                        // 🔹 VALIDACIÓN (ahora sobre RawClass)
+                        // -----------------------------
+                        // 2. VALIDACIÓN
+                        // -----------------------------
                         let validation_errors = Validator::validate(&raw_class);
                         qa.handle_validation(validation_errors.clone(), line.clone());
 
-                        // 🔹 SOLO GUARDAS SI ES VÁLIDO
+                        // -----------------------------
+                        // 3. NORMALIZACIÓN → DOMAIN
+                        // -----------------------------
                         if validation_errors.is_empty() {
-                            raw_dataset.push(raw_class);
+                            if let Some(class) = Normalizer::normalize(raw_class) {
+                                dataset.push(class);
+                            }
                         }
                     }
                     Err(e) => {
@@ -62,10 +75,10 @@ fn main() {
         }
     }
 
-    // ---------------- REPORTE ----------------
-    qa.report();
+    let analytics = ScheduleAnalytics::new(dataset);
 
-    // 🔹 DEBUG OPCIONAL
-    println!("Clases válidas: {}", raw_dataset.len());
-    println!("Ejemplo de clase válida: {:#?}", raw_dataset.first());
+    analytics.summary();
+
+    let conflicts = analytics.detect_conflicts();
+    println!("Conflictos: {}", conflicts.len());
 }
