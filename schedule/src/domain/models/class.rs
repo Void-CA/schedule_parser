@@ -1,8 +1,10 @@
+use serde::{Deserialize, Serialize};
+
 use super::day::Day;
 use super::block::AcademicBlock;
 use super::major::Major;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Class {
     pub day: Day,
     pub start_block: AcademicBlock,
