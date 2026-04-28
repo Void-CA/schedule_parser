@@ -2,6 +2,7 @@ mod extraction;
 mod parser_qa;
 mod error;
 mod validator;
+mod domain;
 
 use crate::extraction::preprocess::normalize_lines::normalize_lines;
 use crate::extraction::models::row::RowParser;
@@ -10,7 +11,6 @@ use crate::extraction::models::class::RawClass;
 
 use crate::parser_qa::ParserQA;
 use crate::validator::Validator;
-// use crate::normalizer::Normalizer; // siguiente paso
 
 fn main() {
     let pdf_path = "horarios_IV.pdf";
@@ -67,4 +67,5 @@ fn main() {
 
     // 🔹 DEBUG OPCIONAL
     println!("Clases válidas: {}", raw_dataset.len());
+    println!("Ejemplo de clase válida: {:#?}", raw_dataset.first());
 }

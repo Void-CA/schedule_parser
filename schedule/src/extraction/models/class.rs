@@ -1,5 +1,6 @@
 use crate::extraction::models::{detail::RawDetail, row::RawRow};
 
+#[derive(Debug, Clone)]
 pub struct RawClass {
     pub day: String,
     pub start_time: String,
