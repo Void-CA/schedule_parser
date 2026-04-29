@@ -7,7 +7,20 @@ use crate::domain::models::Class;
 pub struct JsonStore;
 
 impl JsonStore {
-    pub fn save(path: &str, data: &Vec<Class>) -> Result<(), String> {
+    pub fn save_classes(path: &str, data: &Vec<Class>) -> Result<(), String> {
+        let json = serde_json::to_string_pretty(data)
+            .map_err(|e| e.to_string())?;
+
+        let mut file = File::create(path)
+            .map_err(|e| e.to_string())?;
+
+        file.write_all(json.as_bytes())
+            .map_err(|e| e.to_string())?;
+
+        Ok(())
+    }
+
+    pub fn save<T: serde::Serialize>(path: &str, data: &T) -> Result<(), String> {
         let json = serde_json::to_string_pretty(data)
             .map_err(|e| e.to_string())?;
 

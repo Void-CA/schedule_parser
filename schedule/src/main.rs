@@ -13,12 +13,25 @@ use crate::analytics::model::ScheduleAnalytics;
 use crate::storage::json_store::JsonStore;
 
 fn main() {
-    let dataset = Pipeline::build("horarios_IV.pdf");
+    let dataset_I = Pipeline::build("horarios_I.pdf");
+    let dataset_II = Pipeline::build("horarios_II.pdf");
+    let dataset_III = Pipeline::build("horarios_III.pdf");
+    let dataset_IV = Pipeline::build("horarios_IV.pdf");
+    let mut students_schedule = domain::students::StudentSchedule::new();
 
-    JsonStore::save("horarios_IV.json", &dataset)
+    students_schedule.add_year(1, dataset_I.clone());
+    students_schedule.add_year(2, dataset_II.clone());
+    students_schedule.add_year(3, dataset_III.clone());
+    students_schedule.add_year(4, dataset_IV.clone());
+    
+    let mut dataset = dataset_I;
+    dataset.extend(dataset_II);
+    dataset.extend(dataset_III);
+    dataset.extend(dataset_IV);
+    
+    let professors_schedules = domain::professor::ProfessorSchedules::build(&dataset);
+    JsonStore::save("professors_schedules.json", &professors_schedules.map)
         .expect("Error guardando JSON");
 
-    let analytics = ScheduleAnalytics::new(dataset);
-
-    analytics.summary();
+    JsonStore::save("json/estudiantes/horarios_full.json", &students_schedule.by_year).expect("Error")
 }
