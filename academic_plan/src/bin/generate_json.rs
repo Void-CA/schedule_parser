@@ -27,7 +27,8 @@ fn parse_raw_file(filepath: &str) -> Vec<String> {
             if !current_name.is_empty() {
                 official_names.push(current_name.clone());
             }
-            current_name = trimmed[1..].trim().to_string();
+            // Saltar el carácter • (1 char, no 1 byte)
+            current_name = trimmed.chars().skip(1).collect::<String>().trim().to_string();
         } else {
             // Es continuación del nombre anterior
             if !current_name.is_empty() {
@@ -149,7 +150,7 @@ fn main() {
     let year = "2026";
     
     // Archivos
-    let raw_file = format!("data/courses/raw_{}.txt", major.to_lowercase());
+    let raw_file = format!("data/courses/raw_{}.txt", major); // Expects exact case: ICE, IEM, etc.
     let ocr_file = format!("data/processed/plan_{}_{}.txt", major, year);
     let output_file = format!("data/courses/{}_{}.json", major.to_lowercase(), year);
     

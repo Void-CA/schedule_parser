@@ -1,40 +1,33 @@
 use std::collections::HashMap;
 use std::fs;
 use serde::{Deserialize, Serialize};
-use strsim::{levenshtein, normalized_damerau_levenshtein};
 
-/// Estructura para deserializar el archivo JSON de una carrera
+/// Estructura para el nuevo formato JSON (array de nombres oficiales)
 #[derive(Debug, Deserialize, Serialize)]
 struct CourseData {
     major: String,
     year: String,
+    #[serde(default)]
     courses: HashMap<String, String>,
+    #[serde(default)]
+    official_names: Vec<String>,
 }
 
-/// Capa de corrección de nombres usando:
-/// 1. Archivo JSON (nombres oficiales por código)
-/// 2. Fuzzy matching (búsqueda por similitud si el código falla)
-/// 3. Patrones OCR sistemáticos
+/// Capa de corrección simple: JSON + OCR fixes
 pub struct NameCorrector {
-    /// Diccionario cargado: código -> nombre oficial
+    /// Diccionario: código OCR -> nombre oficial
     known_courses: HashMap<String, String>,
-    /// Lista plana de nombres para fuzzy search
-    course_names: Vec<String>,
-    /// Patrones OCR comunes
+    /// Lista de nombres para búsqueda rápida
     ocr_fixes: Vec<(String, String)>,
 }
 
 impl NameCorrector {
-    /// Carga los nombres desde el archivo JSON
     pub fn from_file(major: &str, year: &str) -> Result<Self, Box<dyn std::error::Error>> {
         let file_path = format!("data/courses/{}_{}.json", major.to_lowercase(), year);
         let content = fs::read_to_string(&file_path)?;
         let course_data: CourseData = serde_json::from_str(&content)?;
         
-        let known_courses = course_data.courses.clone();
-        let course_names: Vec<String> = known_courses.values().cloned().collect();
-        
-        let ocr_fixes = vec![
+        let mut ocr_fixes = vec![
             (" ll ".to_string(), " II ".to_string()),
             ("ll ".to_string(), "II ".to_string()),
             (" ll".to_string(), " II".to_string()),
@@ -58,56 +51,27 @@ impl NameCorrector {
         ];
 
         Ok(Self {
-            known_courses,
-            course_names,
+            known_courses: course_data.courses,
             ocr_fixes,
         })
     }
 
-    /// Corrige el nombre usando múltiples estrategias
+    /// Corrige aplicando solo OCR fixes (el JSON ya tiene los nombres correctos)
     pub fn correct(&self, code: &str, raw_name: &str) -> String {
-        // Paso 1: Aplicar correcciones OCR básicas
-        let cleaned_name = self.apply_ocr_fixes(raw_name);
-
-        // Paso 2: Fuzzy matching (búsqueda por similitud)
-        // IGNORAMOS el código porque cambia entre planes
-        if let Some(best_match) = self.find_best_match(&cleaned_name) {
-            return best_match;
+        // Si el código está en el JSON, usá ese nombre
+        if let Some(official) = self.known_courses.get(code) {
+            return official.clone();
         }
 
-        // Paso 3: Si nada funciona, devolver el nombre limpio del OCR
-        cleaned_name
-    }
-
-    /// Aplica correcciones de patrones OCR sistemáticos
-    fn apply_ocr_fixes(&self, name: &str) -> String {
-        let mut result = format!(" {} ", name);
+        // Sino, aplicar OCR fixes al nombre sucio
+        let mut result = raw_name.to_string();
         for (wrong, right) in &self.ocr_fixes {
             result = result.replace(wrong, right);
         }
         result.split_whitespace().collect::<Vec<&str>>().join(" ")
     }
 
-    /// Encuentra el nombre más similar usando distancia de Damerau-Levenshtein
-    fn find_best_match(&self, name: &str) -> Option<String> {
-        let name_lower = name.to_lowercase();
-        let mut best_score = 0.0;
-        let mut best_match = None;
-
-        for official_name in &self.course_names {
-            let official_lower = official_name.to_lowercase();
-            let score = normalized_damerau_levenshtein(&name_lower, &official_lower);
-            
-            if score > best_score && score > 0.75 { // Umbral de similitud 75%
-                best_score = score;
-                best_match = Some(official_name.clone());
-            }
-        }
-
-        best_match
-    }
-
-    /// Verifica si un código existe en el JSON (para filtrar basura)
+    /// Verifica si el código existe en el JSON
     pub fn is_valid_code(&self, code: &str) -> bool {
         self.known_courses.contains_key(code)
     }

@@ -1,0 +1,130 @@
+                                                             Universidad Tecnológica La Salle ULSA
+                                                                            VICERRECTORÍA ACADÉMICA
+                                                                      DECANATURA | COORDINACIÓN ACADÉMICA
+
+                                                                         HORARIO GENERAL DE CLASES IIC-2026
+                                                                      Fecha de Inicio: 11/05/2026 | Fecha de Finalización: 28/08/2026
+
+
+Año: IV AÑO   Grupos: Gpo 1 Carrera: IMS
+
+ Dia    Inicia     Finaliza   Asignatura                                                       Oferta            Grupo   Docente                                Local
+ Lu    08:00 am   09:40 am    Lenguaje de Programación III                                     * IMS             Gpo 1   Ing. Freddy Alexander Mejía Quintana   A102
+ Lu    10:00 am   11:40 am    Robótica                                                         * IMS             Gpo 1   Ing. Kevin Josué Flores Carvajal       B105
+ Ma    10:00 am   11:40 am    Modelos de Simulación                                            * IMS             Gpo 1   MSc. José Abraham Miranda Chávez       E201
+ Ma    01:00 pm   02:40 pm    Administración Financiera I                                   * IMS, IME           Gpo 1   MSc. Anioska Josefina Alemán Chávez    G109
+ Ma    03:00 pm   03:50 pm    Administración Financiera I                                   * IMS, IME           Gpo 1   MSc. Anioska Josefina Alemán Chávez    G109
+ Mi    08:00 am   09:40 am    Lenguaje de Programación III                                     * IMS             Gpo 1   Ing. Freddy Alexander Mejía Quintana   A102
+ Mi    10:00 am   11:40 am    Robótica                                                         * IMS             Gpo 1   Ing. Kevin Josué Flores Carvajal       B105
+ Ju    10:00 am   11:40 am    Modelos de Simulación                                            * IMS             Gpo 1   MSc. José Abraham Miranda Chávez       E201
+
+
+Año: IV AÑO   Grupos: Gpo 1 Carrera: LCM
+
+ Dia    Inicia     Finaliza   Asignatura                                                      Oferta            Grupo    Docente                                Local
+ Lu    08:00 am   09:40 am    Gestión Estratégica Publicitaria                                * LCM             Gpo 1    MSc. Walter Bladimir Ruíz Avendaño     A103
+ Lu    10:00 am   11:40 am    Gestión Estratégica Publicitaria                                * LCM             Gpo 1    MSc. Walter Bladimir Ruíz Avendaño     A103
+ Lu    01:00 pm   02:40 pm    Formulación y Evaluación de Proyectos                        * LCM, LAF           Gpo 1    MSc. Suyapa Carolina Vanegas Padilla   I102
+ Ma    01:00 pm   02:40 pm    Diseño y Gestión Web I                                          * LCM             Gpo 1    Ing. Freddy Alexander Mejía Quintana   A103
+ Ma    03:00 pm   04:40 pm    Logística y Distribución Comercial                            LAF, LCM            Gpo 1    Lic. Dalia Francisca Niño Ruíz         G105
+ Mi    08:50 am   09:40 am    Teoría de la Decisión                                        * LCM, LAF           Gpo 1    MSc. Anioska Josefina Alemán Chávez    I102
+ Mi    10:00 am   11:40 am    Teoría de la Decisión                                        * LCM, LAF           Gpo 1    MSc. Anioska Josefina Alemán Chávez    I102
+ Mi    01:00 pm   02:40 pm    Logística y Distribución Comercial                            LAF, LCM            Gpo 1    Lic. Dalia Francisca Niño Ruíz         G105
+ Ju    08:00 am   09:40 am    Diseño y Gestión Web I                                          * LCM             Gpo 1    Ing. Freddy Alexander Mejía Quintana   A103
+ Ju    10:00 am   11:40 am    Formulación y Evaluación de Proyectos                        * LCM, LAF           Gpo 1    MSc. Suyapa Carolina Vanegas Padilla   G106
+
+
+Año: IV AÑO   Grupos: Gpo 1 Carrera: IME
+
+ Dia    Inicia     Finaliza   Asignatura                                                        Oferta           Grupo    Docente                               Local
+ Lu    08:50 am   09:40 am    Energía Solar                                                     * IME            Gpo 1    Ing. Briana Lilliam Salmerón Chevez   I102
+ Lu    10:00 am   11:40 am    Energía Solar                                                     * IME            Gpo 1    Ing. Briana Lilliam Salmerón Chevez   I102
+ Lu    01:00 pm   02:40 pm    Energía Geotérmica                                                * IME            Gpo 1    MSc. Wilhelm Jesús Rojas Baca         F202
+ Ma    08:00 am   09:40 am    Máquinas Hidráulicas                                              * IME            Gpo 1    MSc. Benito Martín Núñez              F201
+ Ma    10:00 am   11:40 am    Diseño de Elementos de Máquinas                                   * IME            Gpo 1    Ing. Melvin Antonio Morales Rojas     I102
+ Ma    01:00 pm   02:40 pm    Administración Financiera I                                    * IMS, IME          Gpo 1    MSc. Anioska Josefina Alemán Chávez   G109
+ Ma    03:00 pm   03:50 pm    Administración Financiera I                                    * IMS, IME          Gpo 1    MSc. Anioska Josefina Alemán Chávez   G109
+ Dia    Inicia     Finaliza    Asignatura                                     Oferta     Grupo   Docente                                         Local
+ Mi    08:00 am   09:40 am     Energía Geotérmica                             * IME      Gpo 1   MSc. Wilhelm Jesús Rojas Baca                   F203
+ Mi    10:00 am   11:40 am     Energía Solar                                  * IME      Gpo 1   Ing. Briana Lilliam Salmerón Chevez             F202
+ Ju    10:00 am   11:40 am     Máquinas Hidráulicas                           * IME      Gpo 1   MSc. Benito Martín Núñez                        F201
+ Ju    01:00 pm   02:40 pm     Diseño de Elementos de Máquinas                * IME      Gpo 1   Ing. Melvin Antonio Morales Rojas               I102
+
+
+Año: IV AÑO   Grupos: Gpo 1 Carrera: IGI
+
+ Dia    Inicia     Finaliza    Asignatura                                     Oferta     Grupo   Docente                                         Local
+ Lu    08:50 am   09:40 am     Mercadotecnia                                  * IGI      Gpo 1   Lic. Dalia Francisca Niño Ruíz                  F104
+ Lu    10:00 am   11:40 am     Mercadotecnia                                  * IGI      Gpo 1   Lic. Dalia Francisca Niño Ruíz                  F104
+ Ma    08:50 am   09:40 am     Economia I                                     * IGI      Gpo 1   MSc. Anioska Josefina Alemán Chávez             F104
+ Ma    10:00 am   11:40 am     Economia I                                     * IGI      Gpo 1   MSc. Anioska Josefina Alemán Chávez             F104
+ Mi    10:00 am   11:40 am     Administración Recursos Humanos                * IGI      Gpo 1   Lic. Cristhiam Felipe Ramos Espinoza            A106
+
+
+Año: IV AÑO   Grupos: Gpo 1 Carrera: ICE
+
+ Dia    Inicia     Finaliza    Asignatura                                     Oferta     Grupo   Docente                                         Local
+ Lu    01:00 pm   02:40 pm     Inteligencia Artificial                        * ICE      Gpo 1   Ing. Aarón Emilio Cisneros Quintana             D104
+ Ma    10:00 am   11:40 am     Taller de Conectividad                         * ICE      Gpo 1   Ing. Freddy Alexander Mejía Quintana            B107
+ Mi    10:00 am   11:40 am     Inteligencia Artificial                        * ICE      Gpo 1   Ing. Aarón Emilio Cisneros Quintana             D104
+ Ju    10:00 am   11:40 am     Taller de Conectividad                         * ICE      Gpo 1   Ing. Freddy Alexander Mejía Quintana            B107
+
+
+Año: IV AÑO   Grupos: Gpo 1 Carrera: LAF
+
+ Dia    Inicia     Finaliza    Asignatura                                      Oferta    Grupo   Docente                                         Local
+ Lu    01:00 pm   02:40 pm     Formulación y Evaluación de Proyectos        * LCM, LAF   Gpo 1   MSc. Suyapa Carolina Vanegas Padilla            I102
+ Lu    03:00 pm   04:40 pm     Decisiones de Financiamiento e Inversión I      * LAF     Gpo 1   Lic. Aracely del Carmen Centeno Rivera          E101
+ Ma    08:00 am   09:40 am     Dinero y Bancos                                 * LAF     Gpo 1   Lic. Elizabeth Ruíz Rugama                      E205
+ Ma    10:00 am   11:40 am     Diagnóstico Financiero de Empresas              * LAF     Gpo 1   Lic. Xiomara de la Concepción Martínez Méndez   G105
+ Ma    01:00 pm   02:40 pm     Decisiones de Financiamiento e Inversión I      * LAF     Gpo 1   Lic. Aracely del Carmen Centeno Rivera          G107
+ Ma    03:00 pm   04:40 pm     Logística y Distribución Comercial            LAF, LCM    Gpo 1   Lic. Dalia Francisca Niño Ruíz                  G105
+ Mi    08:50 am   09:40 am     Teoría de la Decisión                        * LCM, LAF   Gpo 1   MSc. Anioska Josefina Alemán Chávez             I102
+ Mi    10:00 am   11:40 am     Teoría de la Decisión                        * LCM, LAF   Gpo 1   MSc. Anioska Josefina Alemán Chávez             I102
+ Mi    01:00 pm   02:40 pm     Logística y Distribución Comercial            LAF, LCM    Gpo 1   Lic. Dalia Francisca Niño Ruíz                  G105
+ Ju    08:00 am   09:40 am     Dinero y Bancos                                 * LAF     Gpo 1   Lic. Elizabeth Ruíz Rugama                      E101
+ Ju    10:00 am   11:40 am     Formulación y Evaluación de Proyectos        * LCM, LAF   Gpo 1   MSc. Suyapa Carolina Vanegas Padilla            G106
+ Ju    01:00 pm   02:40 pm     Diagnóstico Financiero de Empresas              * LAF     Gpo 1   Lic. Xiomara de la Concepción Martínez Méndez   G105
+
+
+Año: IV AÑO   Grupos: Gpo 2 Carrera: IGI
+
+ Dia    Inicia      Finaliza   Asignatura                                     Oferta     Grupo   Docente                                         Local
+ Lu    01:00 pm    02:40 pm    Modelos de Simulación                          * IGI      Gpo 2   MSc. José Abraham Miranda Chávez                E201
+ Mi    01:00 pm    02:40 pm    Modelos de Simulación                          * IGI      Gpo 2   MSc. José Abraham Miranda Chávez                D104
+Año: IV AÑO   Grupos: Gpo 2 Carrera: IMS
+
+ Dia     Inicia     Finaliza   Asignatura                        Oferta   Grupo   Docente                                      Local
+ Lu     01:00 pm   02:40 pm    Robótica                          * IMS    Gpo 2   Ing. Kevin Josué Flores Carvajal             B105
+ Ma     08:00 am   09:40 am    Diseño de Elementos de Máquinas   * IMS    Gpo 2   Ing. Melvin Antonio Morales Rojas            F202
+ Mi     01:00 pm   02:40 pm    Robótica                          * IMS    Gpo 2   Ing. Kevin Josué Flores Carvajal             B105
+ Ju     08:00 am   09:40 am    Diseño de Elementos de Máquinas   * IMS    Gpo 2   Ing. Melvin Antonio Morales Rojas            I102
+
+
+Año: IV AÑO   Grupos: Gpo 2 Carrera: ICE
+
+ Dia     Inicia     Finaliza   Asignatura                        Oferta   Grupo   Docente                                      Local
+ Ju     01:00 pm   02:40 pm    Administración Financiera I       * ICE    Gpo 2   MSc. Anioska Josefina Alemán Chávez          F104
+ Ju     03:00 pm   03:50 pm    Administración Financiera I       * ICE    Gpo 2   MSc. Anioska Josefina Alemán Chávez          F104
+
+
+Año: IV AÑO   Grupos: Gpo 3 Carrera: ICE
+
+ Dia     Inicia     Finaliza   Asignatura                        Oferta   Grupo   Docente                                      Local
+ Lu     03:00 pm   04:40 pm    Modelos de Simulación             * ICE    Gpo 3   Lic. Pedro Pablo López Muñoz                 E201
+ Ma     08:00 am   09:40 am    Robótica                          * ICE    Gpo 3   Ing. María Martha Verónica Lacayo Trujillo   B105
+ Mi     01:00 pm   02:40 pm    Modelos de Simulación             * ICE    Gpo 3   Lic. Pedro Pablo López Muñoz                 E201
+ Ju     08:00 am   09:40 am    Robótica                          * ICE    Gpo 3   Ing. María Martha Verónica Lacayo Trujillo   B105
+
+
+Año: IV AÑO   Grupos: Gpo 3 Carrera: IGI
+
+ Dia     Inicia     Finaliza   Asignatura                        Oferta   Grupo   Docente                                      Local
+ Ju     08:50 am   09:40 am    Administración Financiera I       * IGI    Gpo 3   MSc. Anioska Josefina Alemán Chávez          F104
+ Ju     10:00 am   11:40 am    Administración Financiera I       * IGI    Gpo 3   MSc. Anioska Josefina Alemán Chávez          F104
+
+
+
+
+       Generado electrónicamente desde SIGA
+

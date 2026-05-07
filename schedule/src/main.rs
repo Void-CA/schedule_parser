@@ -17,12 +17,19 @@ fn main() {
     let dataset_II = Pipeline::build("horarios_II.pdf");
     let dataset_III = Pipeline::build("horarios_III.pdf");
     let dataset_IV = Pipeline::build("horarios_IV.pdf");
+    
     let mut students_schedule = domain::students::StudentSchedule::new();
 
     students_schedule.add_year(1, dataset_I.clone());
     students_schedule.add_year(2, dataset_II.clone());
     students_schedule.add_year(3, dataset_III.clone());
     students_schedule.add_year(4, dataset_IV.clone());
+    
+    // Save individual year JSONs
+    JsonStore::save("json/estudiantes/horarios_I.json", &dataset_I).expect("Error");
+    JsonStore::save("json/estudiantes/horarios_II.json", &dataset_II).expect("Error");
+    JsonStore::save("json/estudiantes/horarios_III.json", &dataset_III).expect("Error");
+    JsonStore::save("json/estudiantes/horarios_IV.json", &dataset_IV).expect("Error");
     
     let mut dataset = dataset_I;
     dataset.extend(dataset_II);
