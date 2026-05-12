@@ -28,13 +28,14 @@ impl Day {
 
 impl fmt::Display for Day {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Day::Monday => write!(f, "Lunes"),
-            Day::Tuesday => write!(f, "Martes"),
-            Day::Wednesday => write!(f, "Miércoles"),
-            Day::Thursday => write!(f, "Jueves"),
-            Day::Friday => write!(f, "Viernes"),
-            Day::Saturday => write!(f, "Sábado"),
-        }
+        let s = match self {
+            Day::Monday => "Monday",
+            Day::Tuesday => "Tuesday",
+            Day::Wednesday => "Wednesday",
+            Day::Thursday => "Thursday",
+            Day::Friday => "Friday",
+            Day::Saturday => "Saturday",
+        };
+        write!(f, "{}", s)
     }
 }

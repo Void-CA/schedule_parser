@@ -34,12 +34,48 @@ impl Normalizer {
         end: &str
     ) -> Option<(AcademicBlock, AcademicBlock)> {
         match (start, end) {
-            ("08:00 am", "09:40 am") => Some((AcademicBlock::Morning1, AcademicBlock::Morning2)),
-            ("08:50 am", "09:40 am") => Some((AcademicBlock::Morning2, AcademicBlock::Morning2)),
-            ("10:00 am", "11:40 am") => Some((AcademicBlock::Morning3, AcademicBlock::Morning4)),
-            ("01:00 pm", "02:40 pm") => Some((AcademicBlock::Afternoon1, AcademicBlock::Afternoon2)),
-            ("03:00 pm", "03:50 pm") => Some((AcademicBlock::Afternoon3, AcademicBlock::Afternoon3)),
-            ("03:00 pm", "04:40 pm") => Some((AcademicBlock::Afternoon3, AcademicBlock::Afternoon4)),
+            // Morning
+            ("08:00 am", "08:50 am") => {
+                Some((AcademicBlock::Morning1, AcademicBlock::Morning1))
+            }
+            ("08:00 am", "09:40 am") => {
+                Some((AcademicBlock::Morning1, AcademicBlock::Morning2))
+            }
+            ("08:50 am", "09:40 am") => {
+                Some((AcademicBlock::Morning2, AcademicBlock::Morning2))
+            }
+
+            ("10:00 am", "10:50 am") => {
+                Some((AcademicBlock::Morning3, AcademicBlock::Morning3))
+            }
+            ("10:00 am", "11:40 am") => {
+                Some((AcademicBlock::Morning3, AcademicBlock::Morning4))
+            }
+            ("10:50 am", "11:40 am") => {
+                Some((AcademicBlock::Morning4, AcademicBlock::Morning4))
+            }
+
+            // Afternoon
+            ("01:00 pm", "01:50 pm") => {
+                Some((AcademicBlock::Afternoon1, AcademicBlock::Afternoon1))
+            }
+            ("01:00 pm", "02:40 pm") => {
+                Some((AcademicBlock::Afternoon1, AcademicBlock::Afternoon2))
+            }
+            ("01:50 pm", "02:40 pm") => {
+                Some((AcademicBlock::Afternoon2, AcademicBlock::Afternoon2))
+            }
+
+            ("03:00 pm", "03:50 pm") => {
+                Some((AcademicBlock::Afternoon3, AcademicBlock::Afternoon3))
+            }
+            ("03:00 pm", "04:40 pm") => {
+                Some((AcademicBlock::Afternoon3, AcademicBlock::Afternoon4))
+            }
+            ("03:50 pm", "04:40 pm") => {
+                Some((AcademicBlock::Afternoon4, AcademicBlock::Afternoon4))
+            }
+
             _ => None,
         }
     }

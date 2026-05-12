@@ -7,38 +7,30 @@ mod validator;
 mod error;
 mod storage;
 
-use crate::pipeline::Pipeline;
-use crate::analytics::model::ScheduleAnalytics;
-
-use crate::storage::json_store::JsonStore;
+use std::collections::HashMap;
+use domain::models::Class;
 
 fn main() {
-    let dataset_I = Pipeline::build("horarios_I.pdf");
-    let dataset_II = Pipeline::build("horarios_II.pdf");
-    let dataset_III = Pipeline::build("horarios_III.pdf");
-    let dataset_IV = Pipeline::build("horarios_IV.pdf");
+    let dataset_path = "json/full_schedule.json";
     
-    let mut students_schedule = domain::students::StudentSchedule::new();
+    // Cargar fuente de verdad (formato HashMap directo, retrocompatible)
+    let dataset: HashMap<String, Vec<Class>> = 
+        serde_json::from_str(&std::fs::read_to_string(dataset_path).expect("Error leyendo archivo"))
+        .expect("Error parseando JSON");
 
-    students_schedule.add_year(1, dataset_I.clone());
-    students_schedule.add_year(2, dataset_II.clone());
-    students_schedule.add_year(3, dataset_III.clone());
-    students_schedule.add_year(4, dataset_IV.clone());
-    
-    // Save individual year JSONs
-    JsonStore::save("json/estudiantes/horarios_I.json", &dataset_I).expect("Error");
-    JsonStore::save("json/estudiantes/horarios_II.json", &dataset_II).expect("Error");
-    JsonStore::save("json/estudiantes/horarios_III.json", &dataset_III).expect("Error");
-    JsonStore::save("json/estudiantes/horarios_IV.json", &dataset_IV).expect("Error");
-    
-    let mut dataset = dataset_I;
-    dataset.extend(dataset_II);
-    dataset.extend(dataset_III);
-    dataset.extend(dataset_IV);
-    
-    let professors_schedules = domain::professor::ProfessorSchedules::build(&dataset);
-    JsonStore::save("professors_schedules.json", &professors_schedules.map)
-        .expect("Error guardando JSON");
+    // Todas las clases planas
+    let all_classes: Vec<Class> = dataset.values().flat_map(|c| c.clone()).collect();
 
-    JsonStore::save("json/estudiantes/horarios_full.json", &students_schedule.by_year).expect("Error")
+    // Generar schedules derivados
+    let professors_schedules = domain::professor::ProfessorSchedules::build(&all_classes);
+    let rooms_schedules = domain::room::RoomSchedules::build(&all_classes);
+
+    // Guardar perspectivas derivadas
+    storage::json_store::save_json("professors_schedules.json", &professors_schedules.map)
+        .expect("Error guardando professors_schedules");
+
+    storage::json_store::save_json("rooms_schedules.json", &rooms_schedules.map)
+        .expect("Error guardando rooms_schedules");
+
+    println!("Generados: professors_schedules.json, rooms_schedules.json");
 }

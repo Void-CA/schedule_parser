@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::domain::models::Class;
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StudentSchedule {
     pub by_year: HashMap<u8, Vec<Class>>,
 }

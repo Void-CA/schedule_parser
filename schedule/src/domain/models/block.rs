@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::fmt;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Serialize, Deserialize)]
 pub enum AcademicBlock {
@@ -38,5 +39,21 @@ impl AcademicBlock {
             7 => Some(Self::Afternoon4),
             _ => None,
         }
+    }
+}
+
+impl fmt::Display for AcademicBlock {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            Self::Morning1 => "Morning1",
+            Self::Morning2 => "Morning2",
+            Self::Morning3 => "Morning3",
+            Self::Morning4 => "Morning4",
+            Self::Afternoon1 => "Afternoon1",
+            Self::Afternoon2 => "Afternoon2",
+            Self::Afternoon3 => "Afternoon3",
+            Self::Afternoon4 => "Afternoon4",
+        };
+        write!(f, "{}", s)
     }
 }
